@@ -1,0 +1,87 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Booking Management</h1>
+    <p-button
+      size="small"
+      label="Refresh"
+      icon="pi pi-refresh"
+      (onClick)="loadBookings()"
+    ></p-button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="bookings.length === 0" class="flex flex-col items-center justify-center py-16">
+    <i class="pi pi-ticket text-6xl text-gray-300 mb-4"></i>
+    <h2 class="text-2xl font-semibold text-gray-600 mb-2">No Bookings Yet</h2>
+    <p class="text-gray-500 mb-6">Bookings will appear here once users start purchasing tickets</p>
+  </div>
+
+  <!-- Table with Data -->
+  <p-table
+    *ngIf="bookings.length > 0"
+    [value]="bookings"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [rows]="10"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Booking UUID</th>
+        <th>Movie</th>
+        <th>Theater / Screen</th>
+        <th>Showtime</th>
+        <th>Seats</th>
+        <th>Total Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-booking>
+      <tr>
+        <td>
+          <code class="text-xs">{{ booking.bookingUuid }}</code>
+        </td>
+        <td>{{ booking.movieTitle }}</td>
+        <td>
+          <div>{{ booking.theaterName }}</div>
+          <div class="text-sm text-gray-600">{{ booking.screenName }}</div>
+        </td>
+        <td>{{ booking.startTime | date : 'MMM d, y, h:mm a' }}</td>
+        <td>{{ getSeatList(booking) }}</td>
+        <td>{{ booking.totalAmount }} {{ booking.currency }}</td>
+        <td>
+          <p-tag [value]="booking.status" [severity]="getStatusSeverity(booking.status)"></p-tag>
+        </td>
+        <td>
+          <p-button
+            size="small"
+            *ngIf="canVerify(booking)"
+            icon="pi pi-check-circle"
+            [rounded]="true"
+            [text]="true"
+            severity="success"
+            pTooltip="Verify Ticket"
+            (onClick)="verifyBooking(booking)"
+          ></p-button>
+          <p-button
+            *ngIf="canCancel(booking)"
+            icon="pi pi-times-circle"
+            [rounded]="true"
+            [text]="true"
+            severity="danger"
+            pTooltip="Cancel Booking"
+            (onClick)="cancelBooking(booking)"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="9" class="text-center py-4 text-gray-500">No bookings found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+</div>

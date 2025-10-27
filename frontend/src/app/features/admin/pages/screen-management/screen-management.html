@@ -1,0 +1,149 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <p-button
+        size="small"
+        icon="pi pi-arrow-left"
+        [rounded]="true"
+        [text]="true"
+        severity="secondary"
+        (onClick)="goBack()"
+      ></p-button>
+      <h1 class="text-3xl font-bold inline-block ml-4">Screen Management - {{ theater?.name }}</h1>
+    </div>
+    <p-button label="Add Screen" icon="pi pi-plus" (onClick)="openCreateDialog()"></p-button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="screens.length === 0" class="flex flex-col items-center justify-center py-16">
+    <i class="pi pi-desktop text-6xl text-gray-300 mb-4"></i>
+    <h2 class="text-2xl font-semibold text-gray-600 mb-2">No Screens Yet</h2>
+    <p class="text-gray-500 mb-6">Add screens to {{ theater?.name }} to start scheduling shows</p>
+    <p-button label="Add First Screen" icon="pi pi-plus" (onClick)="openCreateDialog()"></p-button>
+  </div>
+
+  <!-- Table with Data -->
+  <p-table *ngIf="screens.length > 0" [value]="screens" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Screen Name</th>
+        <th>Rows</th>
+        <th>Columns</th>
+        <th>Total Seats</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-screen>
+      <tr>
+        <td>{{ screen.screenName }}</td>
+        <td>{{ screen.totalRows }}</td>
+        <td>{{ screen.totalColumns }}</td>
+        <td>{{ screen.totalRows * screen.totalColumns }}</td>
+        <td>
+          <p-button
+            size="small"
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            severity="info"
+            pTooltip="Edit Screen"
+            (onClick)="openEditDialog(screen)"
+          ></p-button>
+          <p-button
+            size="small"
+            icon="pi pi-trash"
+            [rounded]="true"
+            [text]="true"
+            severity="danger"
+            (onClick)="deleteScreen(screen)"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Edit Screen' : 'Add Screen'"
+    [modal]="true"
+    [style]="{ width: '40vw' }"
+  >
+    <form [formGroup]="screenForm" class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="screenName">Screen Name *</label>
+        <input
+          id="screenName"
+          type="text"
+          pInputText
+          formControlName="screenName"
+          placeholder="e.g., Screen 1, IMAX"
+        />
+        <small
+          class="text-red-500"
+          *ngIf="screenForm.get('screenName')?.invalid && screenForm.get('screenName')?.touched"
+        >
+          Screen name is required
+        </small>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <label for="totalRows">Rows *</label>
+          <p-inputNumber
+            id="totalRows"
+            formControlName="totalRows"
+            [min]="1"
+            [max]="50"
+            [useGrouping]="false"
+            placeholder="10"
+          ></p-inputNumber>
+          <small
+            class="text-red-500"
+            *ngIf="screenForm.get('totalRows')?.invalid && screenForm.get('totalRows')?.touched"
+          >
+            Rows required (1-50)
+          </small>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="totalColumns">Seats Per Row *</label>
+          <p-inputNumber
+            id="totalColumns"
+            formControlName="totalColumns"
+            [min]="1"
+            [max]="50"
+            [useGrouping]="false"
+            placeholder="15"
+          ></p-inputNumber>
+          <small
+            class="text-red-500"
+            *ngIf="
+              screenForm.get('totalColumns')?.invalid && screenForm.get('totalColumns')?.touched
+            "
+          >
+            Seats per row required (1-50)
+          </small>
+        </div>
+      </div>
+
+      <div
+        *ngIf="isEditMode"
+        class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4"
+      >
+        <p class="font-bold">Note:</p>
+        <p>
+          Only the screen name can be edited. Rows and seats per row cannot be changed after
+          creation.
+        </p>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" severity="secondary" (onClick)="displayDialog = false"></p-button>
+      <p-button label="Save" (onClick)="saveScreen()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+</div>

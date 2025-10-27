@@ -1,0 +1,136 @@
+<div class="min-h-screen surface-ground">
+  <!-- Hero Section -->
+  <section class="flex items-center justify-center min-h-[80vh] p-6">
+    <div class="text-center max-w-3xl">
+      <!-- Badge -->
+      <div class="mb-6">
+        <span
+          class="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 text-primary-700 rounded-full text-sm font-medium"
+        >
+          <i class="pi pi-sparkles"></i>
+          Seamless Movie Booking Experience
+        </span>
+      </div>
+
+      <!-- Heading -->
+      <h1 class="text-5xl md:text-6xl font-bold text-surface-900 mb-6 leading-tight">
+        Book Your Next Movie
+        <span class="block text-primary-500 mt-2">In Seconds</span>
+      </h1>
+
+      <!-- Subheading -->
+      <p class="text-xl text-surface-600 mb-8 max-w-2xl mx-auto">
+        Choose from hundreds of movies, pick your perfect seat, and get instant digital tickets. All
+        in one place.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col max-w-md mx-auto gap-2 justify-center mb-12">
+        <p-button
+          styleClass="w-full"
+          label="Browse Movies"
+          icon="pi pi-film"
+          size="large"
+          (onClick)="browse()"
+        >
+        </p-button>
+        <p-button
+          label="Sign In"
+          styleClass="w-full"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          size="large"
+          [outlined]="true"
+          severity="secondary"
+          routerLink="/login"
+        >
+        </p-button>
+      </div>
+
+      <!-- Social Proof -->
+      <div class="flex items-center justify-center gap-8 text-surface-600 text-sm">
+        <div class="flex items-center gap-2">
+          <i class="pi pi-users"></i>
+          <span>Trusted Booking Partners</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-video"></i>
+          <span>Latest Movies</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="pi pi-building"></i>
+          <span>Wide Theater Network</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 px-6 surface-card">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-surface-900 mb-4">
+          Everything You Need, Nothing You Don't
+        </h2>
+        <p class="text-lg text-surface-600">Simple, fast, and reliable movie booking</p>
+      </div>
+
+      <!-- Feature Grid -->
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="text-center">
+          <div
+            class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary-50 flex items-center justify-center"
+          >
+            <i class="pi pi-bolt text-3xl text-primary-500"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-surface-900 mb-2">Lightning Fast</h3>
+          <p class="text-surface-600">Book tickets in seconds with our streamlined process</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="text-center">
+          <div
+            class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary-50 flex items-center justify-center"
+          >
+            <i class="pi pi-th-large text-3xl text-primary-500"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-surface-900 mb-2">Visual Seat Selection</h3>
+          <p class="text-surface-600">Pick your perfect seat with our interactive seat map</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="text-center">
+          <div
+            class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary-50 flex items-center justify-center"
+          >
+            <i class="pi pi-mobile text-3xl text-primary-500"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-surface-900 mb-2">Instant Digital Tickets</h3>
+          <p class="text-surface-600">Get QR code tickets instantly on your device</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div
+        class="rounded-3xl bg-gradient-to-br from-primary-500 to-primary-700 p-12 text-white shadow-xl"
+      >
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
+        <p class="text-xl text-primary-100 mb-8">Join thousands of movie lovers booking smarter</p>
+        <p-button
+          label="Browse Movies Now"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          size="large"
+          severity="secondary"
+          (onClick)="browse()"
+        >
+        </p-button>
+      </div>
+    </div>
+  </section>
+</div>

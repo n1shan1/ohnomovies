@@ -1,0 +1,38 @@
+<div class="min-h-screen bg-surface-50 p-8 flex justify-center items-center">
+  <p-card class="max-w-2xl w-full shadow-2xl">
+    <div class="flex flex-col items-center text-center p-8">
+      <!-- Icon -->
+      <div class="mb-8">
+        <i class="pi pi-lock text-red-500" style="font-size: 5rem"></i>
+      </div>
+
+      <!-- Error Message -->
+      <h1 class="text-4xl font-bold text-surface-900 mb-4">403 - Unauthorized</h1>
+      <p class="text-xl text-surface-600 mb-4">
+        You don't have permission to access this resource.
+      </p>
+      <p class="text-base text-surface-500 mb-8 leading-relaxed">
+        This page is restricted to authorized users only. If you believe this is an error, please
+        contact support or try logging in with appropriate credentials.
+      </p>
+
+      <!-- Actions -->
+      <div class="flex gap-4 flex-wrap justify-center">
+        <p-button
+          label="Go Back"
+          icon="pi pi-arrow-left"
+          severity="secondary"
+          (onClick)="goBack()"
+          class="min-w-[150px]"
+        />
+        <p-button
+          label="Go Home"
+          icon="pi pi-home"
+          severity="primary"
+          (onClick)="goHome()"
+          class="min-w-[150px]"
+        />
+      </div>
+    </div>
+  </p-card>
+</div>

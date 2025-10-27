@@ -1,0 +1,187 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Showtime Management</h1>
+    <p-button
+      size="small"
+      label="Create Showtime"
+      icon="pi pi-plus"
+      (onClick)="openCreateDialog()"
+    ></p-button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="showtimes.length === 0" class="flex flex-col items-center justify-center py-16">
+    <i class="pi pi-calendar text-6xl text-gray-300 mb-4"></i>
+    <h2 class="text-2xl font-semibold text-gray-600 mb-2">No Showtimes Yet</h2>
+    <p class="text-gray-500 mb-6">Schedule your first showtime to start selling tickets</p>
+    <p-button
+      size="small"
+      label="Create First Showtime"
+      icon="pi pi-plus"
+      (onClick)="openCreateDialog()"
+    ></p-button>
+  </div>
+
+  <!-- Table with Data -->
+  <p-table *ngIf="showtimes.length > 0" [value]="showtimes" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Movie</th>
+        <th>Theater</th>
+        <th>Screen</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-showtime>
+      <tr>
+        <td>{{ showtime.movieTitle }}</td>
+        <td>{{ showtime.theaterName }}</td>
+        <td>{{ showtime.screenName }}</td>
+        <td>{{ showtime.startTime | date : 'MMM d, y, h:mm a' }}</td>
+        <td>{{ showtime.endTime | date : 'MMM d, y, h:mm a' }}</td>
+        <td>₹{{ showtime.price }}</td>
+        <td>
+          <p-button
+            size="small"
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            severity="info"
+            (onClick)="openEditDialog(showtime)"
+          ></p-button>
+          <p-button
+            size="small"
+            icon="pi pi-trash"
+            [rounded]="true"
+            [text]="true"
+            severity="danger"
+            (onClick)="deleteShowtime(showtime)"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Edit Showtime' : 'Create Showtime'"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+  >
+    <form [formGroup]="showtimeForm" class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="movieId">Movie *</label>
+        <p-select
+          id="movieId"
+          formControlName="movieId"
+          [options]="movies"
+          optionLabel="title"
+          optionValue="id"
+          placeholder="Select a movie"
+          [filter]="true"
+          class="w-full"
+        ></p-select>
+        <small
+          class="text-red-500"
+          *ngIf="showtimeForm.get('movieId')?.invalid && showtimeForm.get('movieId')?.touched"
+        >
+          Movie is required
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="theaterId">Theater *</label>
+        <p-select
+          id="theaterId"
+          formControlName="theaterId"
+          [options]="theaters"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Select a theater"
+          [filter]="true"
+          class="w-full"
+        ></p-select>
+        <small
+          class="text-red-500"
+          *ngIf="showtimeForm.get('theaterId')?.invalid && showtimeForm.get('theaterId')?.touched"
+        >
+          Theater is required
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="screenId">Screen *</label>
+        <p-select
+          id="screenId"
+          formControlName="screenId"
+          [options]="screens"
+          optionLabel="screenName"
+          optionValue="id"
+          placeholder="Select a screen"
+          [disabled]="!showtimeForm.get('theaterId')?.value"
+          class="w-full"
+        ></p-select>
+        <small
+          class="text-red-500"
+          *ngIf="showtimeForm.get('screenId')?.invalid && showtimeForm.get('screenId')?.touched"
+        >
+          Screen is required
+        </small>
+        <small class="text-gray-500" *ngIf="!showtimeForm.get('theaterId')?.value">
+          Please select a theater first
+        </small>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <label for="startTime">Start Time *</label>
+          <p-datepicker
+            id="startTime"
+            formControlName="startTime"
+            [showTime]="true"
+            [showSeconds]="false"
+            hourFormat="12"
+            [showIcon]="true"
+            dateFormat="yy-mm-dd"
+            placeholder="Select date and time"
+          />
+          <small
+            class="text-red-500"
+            *ngIf="showtimeForm.get('startTime')?.invalid && showtimeForm.get('startTime')?.touched"
+          >
+            Start time is required
+          </small>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="price">Price *</label>
+          <p-inputNumber
+            id="price"
+            formControlName="price"
+            mode="currency"
+            currency="USD"
+            [min]="0"
+            class="w-full"
+          ></p-inputNumber>
+          <small
+            class="text-red-500"
+            *ngIf="showtimeForm.get('price')?.invalid && showtimeForm.get('price')?.touched"
+          >
+            Price is required
+          </small>
+        </div>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" severity="secondary" (onClick)="displayDialog = false"></p-button>
+      <p-button label="Save" (onClick)="saveShowtime()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+</div>

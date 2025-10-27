@@ -1,0 +1,42 @@
+<div class="p-6">
+  <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+  <p class="text-gray-600 mb-8">Welcome to the OhNoMovies Admin Panel</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <p-card>
+      <div class="text-center">
+        <div class="text-4xl font-bold text-blue-600 mb-2">
+          {{ stats.movies }}
+        </div>
+        <div class="text-gray-600">Total Movies</div>
+      </div>
+    </p-card>
+
+    <p-card>
+      <div class="text-center">
+        <div class="text-4xl font-bold text-green-600 mb-2">
+          {{ stats.theaters }}
+        </div>
+        <div class="text-gray-600">Total Theaters</div>
+      </div>
+    </p-card>
+
+    <p-card>
+      <div class="text-center">
+        <div class="text-4xl font-bold text-purple-600 mb-2">
+          {{ stats.showtimes }}
+        </div>
+        <div class="text-gray-600">Total Showtimes</div>
+      </div>
+    </p-card>
+
+    <p-card>
+      <div class="text-center">
+        <div class="text-4xl font-bold text-orange-600 mb-2">
+          {{ stats.bookings }}
+        </div>
+        <div class="text-gray-600">Total Bookings</div>
+      </div>
+    </p-card>
+  </div>
+</div>

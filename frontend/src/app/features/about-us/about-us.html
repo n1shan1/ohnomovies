@@ -1,0 +1,74 @@
+<div class="min-h-screen surface-ground">
+  <div class="surface-card border-b border-surface-200">
+    <div class="max-w-7xl mx-auto px-6 py-16 text-center">
+      <h1 class="text-5xl font-extrabold text-surface-900 mb-4">About ohnomovies</h1>
+      <p class="text-xl text-surface-600 max-w-3xl mx-auto">
+        Your trusted partner for seamless movie ticket booking experiences since 2024
+      </p>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="my-12">
+      <h2 class="text-4xl font-bold text-surface-900 text-center mb-12">Our Values</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div
+            class="w-20 h-20 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center"
+          >
+            <i class="pi pi-users text-4xl text-primary-600"></i>
+          </div>
+          <h3 class="text-xl font-bold text-surface-900 mb-2">Customer First</h3>
+          <p class="text-surface-600">
+            Your satisfaction and experience are at the heart of everything we do
+          </p>
+        </div>
+        <div class="text-center">
+          <div
+            class="w-20 h-20 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center"
+          >
+            <i class="pi pi-bolt text-4xl text-primary-600"></i>
+          </div>
+          <h3 class="text-xl font-bold text-surface-900 mb-2">Innovation</h3>
+          <p class="text-surface-600">
+            Constantly improving our platform with the latest technology
+          </p>
+        </div>
+        <div class="text-center">
+          <div
+            class="w-20 h-20 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center"
+          >
+            <i class="pi pi-shield text-4xl text-primary-600"></i>
+          </div>
+          <h3 class="text-xl font-bold text-surface-900 mb-2">Trust</h3>
+          <p class="text-surface-600">Secure bookings and transparent processes you can rely on</p>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-16">
+      <p-card styleClass="surface-50 border border-primary-200">
+        <h2 class="text-3xl font-bold text-surface-900 mb-4">
+          Ready to Experience the Difference?
+        </h2>
+        <p class="text-surface-600 mb-6 text-lg">
+          Join thousands of satisfied customers who've made OhNoMovies their go-to booking platform
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <p-button
+            label="Browse Movies"
+            icon="pi pi-film"
+            size="large"
+            (onClick)="navigate('/movies')"
+          ></p-button>
+          <p-button
+            label="Contact Us"
+            icon="pi pi-envelope"
+            size="large"
+            severity="secondary"
+            [outlined]="true"
+            (onClick)="navigate('/contact')"
+          ></p-button>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

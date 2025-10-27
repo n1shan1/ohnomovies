@@ -1,0 +1,10 @@
+@import 'primeicons/primeicons.css';
+
+/* Global Styles */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  font-optical-sizing: auto;
+}

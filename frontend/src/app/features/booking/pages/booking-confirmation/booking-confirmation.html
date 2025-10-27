@@ -1,0 +1,129 @@
+<div class="p-6">
+  <!-- Loading State -->
+  @if (isLoading) {
+  <div class="flex justify-center items-center py-20">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+  }
+
+  <!-- Confirmation Content -->
+  @if (!isLoading && booking) {
+  <div class="max-w-3xl mx-auto">
+    <!-- Success Header -->
+    <div class="text-center mb-8">
+      <div class="mb-4 animate-scale-in">
+        <i class="pi pi-check-circle text-8xl text-green-500"></i>
+      </div>
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">Booking Confirmed!</h1>
+      <p class="text-xl text-gray-600">Your tickets are ready</p>
+    </div>
+
+    <!-- Booking Details Card -->
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="p-6 bg-linear-to-r from-blue-600 to-blue-700 text-white">
+          <h2 class="text-2xl font-bold mb-2">Booking Details</h2>
+          <p class="text-blue-100">Booking ID: {{ booking.bookingUuid }}</p>
+        </div>
+      </ng-template>
+
+      <div class="space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Booking Date</p>
+            <p class="font-semibold">{{ booking.bookedAt | date : 'medium' }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Status</p>
+            <span
+              class="px-3 py-1 rounded-full text-sm font-medium"
+              [ngClass]="{
+                'bg-green-100 text-green-700': booking.status === 'CONFIRMED',
+                'bg-yellow-100 text-yellow-700': booking.status === 'PENDING',
+                'bg-red-100 text-red-700': booking.status === 'CANCELLED'
+              }"
+            >
+              {{ booking.status }}
+            </span>
+          </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div>
+          <h3 class="font-semibold text-gray-800 mb-3">Selected Seats</h3>
+          <div class="flex flex-wrap gap-2">
+            @for (seat of booking.seats; track seat) {
+            <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium">
+              {{ seat }}
+            </span>
+            }
+          </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="flex justify-between items-center text-xl font-bold">
+          <span>Total Amount Paid</span>
+          <span class="text-green-600">₹{{ booking.totalAmount }}</span>
+        </div>
+
+        <!-- Movie & Theater Info -->
+        <p-divider></p-divider>
+
+        <div class="space-y-2">
+          <div>
+            <p class="text-sm text-gray-600">Movie</p>
+            <p class="font-semibold">{{ booking.movieTitle }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Theater</p>
+            <p class="font-semibold">{{ booking.theaterName }} - {{ booking.screenName }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Showtime</p>
+            <p class="font-semibold">{{ booking.startTime | date : 'medium' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <p-button
+            label="Download PDF"
+            icon="pi pi-download"
+            styleClass="flex-1"
+            (onClick)="downloadPDF()"
+          >
+          </p-button>
+          <p-button
+            label="View My Bookings"
+            icon="pi pi-list"
+            styleClass="flex-1"
+            severity="secondary"
+            (onClick)="goToMyBookings()"
+          >
+          </p-button>
+          <p-button
+            label="Book More Tickets"
+            icon="pi pi-plus"
+            styleClass="flex-1"
+            severity="success"
+            (onClick)="goToMovies()"
+          >
+          </p-button>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Additional Info -->
+    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+      <p class="text-sm text-gray-700">
+        <i class="pi pi-info-circle mr-2"></i>
+        Please arrive at the theater 15 minutes before showtime. Keep your QR code handy for quick
+        check-in.
+      </p>
+    </div>
+  </div>
+  }
+</div>

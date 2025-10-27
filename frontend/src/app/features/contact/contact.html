@@ -1,0 +1,251 @@
+<div class="min-h-screen surface-ground">
+  <!-- Hero Section -->
+  <div class="surface-card border-b border-surface-200">
+    <div class="max-w-7xl mx-auto px-6 py-16 text-center">
+      <h1 class="text-5xl font-extrabold text-surface-900 mb-4">Get in Touch</h1>
+      <p class="text-xl text-surface-600 max-w-3xl mx-auto">
+        Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as
+        possible.
+      </p>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="grid lg:grid-cols-2 gap-12">
+      <!-- Contact Form -->
+      <div>
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="px-6 pt-6">
+              <h2 class="text-3xl font-bold text-surface-900 flex items-center gap-3">
+                <i class="pi pi-envelope text-primary-500"></i>
+                Send us a Message
+              </h2>
+            </div>
+          </ng-template>
+
+          <form (ngSubmit)="onSubmit()" class="space-y-6">
+            <!-- Name -->
+            <div>
+              <input
+                pInputText
+                id="name"
+                [(ngModel)]="name"
+                name="name"
+                placeholder="John Doe"
+                class="w-full"
+                required
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <input
+                pInputText
+                id="email"
+                type="email"
+                [(ngModel)]="email"
+                name="email"
+                placeholder="john@example.com"
+                class="w-full"
+                required
+              />
+            </div>
+
+            <!-- Subject -->
+            <div>
+              <input
+                pInputText
+                id="subject"
+                [(ngModel)]="subject"
+                name="subject"
+                placeholder="How can we help?"
+                class="w-full"
+                required
+              />
+            </div>
+
+            <!-- Message -->
+            <div>
+              <textarea
+                pInputTextarea
+                id="message"
+                [(ngModel)]="message"
+                name="message"
+                rows="6"
+                placeholder="Tell us more about your inquiry..."
+                class="w-full"
+                required
+              ></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+              <p-button
+                type="submit"
+                label="Send Message"
+                icon="pi pi-send"
+                styleClass="w-full"
+                [loading]="isSubmitting"
+              ></p-button>
+            </div>
+          </form>
+        </p-card>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="space-y-6">
+        <!-- Contact Details -->
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="px-6 pt-6">
+              <h2 class="text-3xl font-bold text-surface-900 flex items-center gap-3">
+                <i class="pi pi-info-circle text-primary-500"></i>
+                Contact Information
+              </h2>
+            </div>
+          </ng-template>
+
+          <div class="space-y-6">
+            <!-- Email -->
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0"
+              >
+                <i class="pi pi-envelope text-xl text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-surface-900 mb-1">Email</h3>
+                <a
+                  href="mailto:support@ohnomovies.in"
+                  class="text-primary-600 hover:text-primary-700"
+                >
+                  support@ohnomovies.in
+                </a>
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0"
+              >
+                <i class="pi pi-phone text-xl text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-surface-900 mb-1">Phone</h3>
+                <a href="tel:+914445678900" class="text-primary-600 hover:text-primary-700">
+                  +91 44 4567 8900
+                </a>
+                <p class="text-sm text-surface-500 mt-1">Customer Support</p>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0"
+              >
+                <i class="pi pi-map-marker text-xl text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-surface-900 mb-1">Head Office</h3>
+                <p class="text-surface-600">
+                  No. 42, Anna Salai<br />
+                  T. Nagar, Chennai - 600017<br />
+                  Tamil Nadu, India
+                </p>
+              </div>
+            </div>
+
+            <!-- Hours -->
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0"
+              >
+                <i class="pi pi-clock text-xl text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-surface-900 mb-1">Business Hours</h3>
+                <p class="text-surface-600">
+                  Monday - Sunday: 9:00 AM - 9:00 PM<br />
+                  Public Holidays: 10:00 AM - 6:00 PM<br />
+                  24/7 Online Support Available
+                </p>
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Social Media -->
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="px-6 pt-6">
+              <h2 class="text-3xl font-bold text-surface-900 flex items-center gap-3">
+                <i class="pi pi-globe text-primary-500"></i>
+                Connect with Us
+              </h2>
+            </div>
+          </ng-template>
+
+          <div class="p-6 space-y-4">
+            <p class="text-surface-600">Follow us for updates, sneak peeks and support.</p>
+
+            <div class="flex flex-wrap gap-3">
+              <a
+                href="https://facebook.com/ohnomovies"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 px-4 py-2 border rounded-md text-surface-900 hover:bg-primary-50"
+              >
+                <i class="pi pi-facebook text-lg text-primary-600"></i>
+                Facebook
+              </a>
+
+              <a
+                href="https://twitter.com/ohnomovies"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 px-4 py-2 border rounded-md text-surface-900 hover:bg-primary-50"
+              >
+                <i class="pi pi-twitter text-lg text-primary-600"></i>
+                Twitter
+              </a>
+
+              <a
+                href="https://instagram.com/ohnomovies"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 px-4 py-2 border rounded-md text-surface-900 hover:bg-primary-50"
+              >
+                <i class="pi pi-instagram text-lg text-primary-600"></i>
+                Instagram
+              </a>
+
+              <a
+                href="https://www.linkedin.com/company/ohnomovies"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 px-4 py-2 border rounded-md text-surface-900 hover:bg-primary-50"
+              >
+                <i class="pi pi-linkedin text-lg text-primary-600"></i>
+                LinkedIn
+              </a>
+
+              <a
+                href="https://youtube.com/ohnomovies"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 px-4 py-2 border rounded-md text-surface-900 hover:bg-primary-50"
+              >
+                <i class="pi pi-youtube text-lg text-primary-600"></i>
+                YouTube
+              </a>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </div>
+</div>

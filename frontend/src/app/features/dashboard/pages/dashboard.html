@@ -1,0 +1,145 @@
+<div class="min-h-screen surface-ground p-6">
+  @if (currentUser$ | async; as user) {
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold text-surface-900 mb-2">
+      Welcome back, {{ user.firstName || 'User' }}!
+    </h1>
+    <p class="text-xl text-surface-600">Ready to book your next movie?</p>
+  </div>
+  }
+
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Quick Action: Browse Movies -->
+    <p-card styleClass="hover:shadow-xl transition-all">
+      <ng-template pTemplate="header">
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-8 text-center">
+          <i class="pi pi-film text-6xl mb-2"></i>
+          <h3 class="text-xl font-bold">Browse Movies</h3>
+        </div>
+      </ng-template>
+      <p class="text-surface-600 mb-4 min-h-[3rem]">
+        Explore our latest collection of movies and find your next favorite.
+      </p>
+      <ng-template pTemplate="footer">
+        <p-button
+          label="View Movies"
+          icon="pi pi-arrow-right"
+          styleClass="w-full"
+          (onClick)="navigateToMovies()"
+        >
+        </p-button>
+      </ng-template>
+    </p-card>
+
+    <!-- Quick Action: My Bookings -->
+    <p-card styleClass="hover:shadow-xl transition-all">
+      <ng-template pTemplate="header">
+        <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-8 text-center">
+          <i class="pi pi-ticket text-6xl mb-2"></i>
+          <h3 class="text-xl font-bold">My Bookings</h3>
+        </div>
+      </ng-template>
+      <p class="text-surface-600 mb-4 min-h-[3rem]">View your upcoming and past movie bookings.</p>
+      <ng-template pTemplate="footer">
+        <p-button
+          label="View Bookings"
+          icon="pi pi-arrow-right"
+          styleClass="w-full"
+          severity="success"
+          (onClick)="navigateToBookings()"
+        >
+        </p-button>
+      </ng-template>
+    </p-card>
+
+    <!-- Quick Action: Profile -->
+    <p-card styleClass="hover:shadow-xl transition-all">
+      <ng-template pTemplate="header">
+        <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-8 text-center">
+          <i class="pi pi-user text-6xl mb-2"></i>
+          <h3 class="text-xl font-bold">Profile Settings</h3>
+        </div>
+      </ng-template>
+      <p class="text-surface-600 mb-4 min-h-[3rem]">
+        Update your personal information and preferences.
+      </p>
+      <ng-template pTemplate="footer">
+        <p-button
+          label="Edit Profile"
+          icon="pi pi-arrow-right"
+          styleClass="w-full"
+          severity="help"
+          (onClick)="navigateToProfile()"
+        >
+        </p-button>
+      </ng-template>
+    </p-card>
+  </div>
+
+  <!-- Recent Bookings Section -->
+  <div class="recent-bookings surface-card rounded-lg shadow-md p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-surface-900">Recent Bookings</h2>
+      @if (recentBookings.length > 0) {
+      <p-button
+        label="View All"
+        icon="pi pi-arrow-right"
+        [text]="true"
+        (onClick)="navigateToBookings()"
+      ></p-button>
+      }
+    </div>
+
+    @if (isLoadingBookings) {
+    <div class="space-y-4">
+      @for (item of [1,2,3]; track item) {
+      <div class="p-4 surface-50 rounded-lg">
+        <p-skeleton width="100%" height="3rem"></p-skeleton>
+      </div>
+      }
+    </div>
+    } @else if (recentBookings.length === 0) {
+    <div class="text-center py-12 text-surface-500">
+      <i class="pi pi-inbox text-6xl mb-4 text-surface-300"></i>
+      <p class="text-lg font-medium mb-2">No bookings yet</p>
+      <p class="text-sm mb-6">Start booking your favorite movies now!</p>
+      <p-button label="Browse Movies" icon="pi pi-film" (onClick)="navigateToMovies()"></p-button>
+    </div>
+    } @else {
+    <div class="space-y-4">
+      @for (booking of recentBookings; track booking.bookingUuid) {
+      <div
+        class="p-4 surface-50 rounded-lg border border-surface-200 hover:shadow-md transition-shadow cursor-pointer"
+        (click)="viewBookingDetails(booking)"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-surface-900 mb-1">{{ booking.movieTitle }}</h3>
+            <div class="flex flex-wrap gap-3 text-sm text-surface-600">
+              <span class="flex items-center gap-1">
+                <i class="pi pi-building"></i>
+                {{ booking.theaterName }}
+              </span>
+              <span class="flex items-center gap-1">
+                <i class="pi pi-calendar"></i>
+                {{ booking.startTime | date : 'MMM d, y' }}
+              </span>
+              <span class="flex items-center gap-1">
+                <i class="pi pi-clock"></i>
+                {{ booking.startTime | date : 'h:mm a' }}
+              </span>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <p-tag [value]="booking.status" [severity]="getStatusSeverity(booking.status)"></p-tag>
+            <span class="text-lg font-bold text-primary-600">
+              {{ booking.totalAmount | currency : booking.currency : 'symbol' : '1.0-0' }}
+            </span>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>

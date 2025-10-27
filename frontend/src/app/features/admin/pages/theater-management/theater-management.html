@@ -1,0 +1,114 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Theater Management</h1>
+    <p-button
+      size="small"
+      label="Create Theater"
+      icon="pi pi-plus"
+      (onClick)="openCreateDialog()"
+    ></p-button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="theaters.length === 0" class="flex flex-col items-center justify-center py-16">
+    <i class="pi pi-building text-6xl text-gray-300 mb-4"></i>
+    <h2 class="text-2xl font-semibold text-gray-600 mb-2">No Theaters Yet</h2>
+    <p class="text-gray-500 mb-6">Get started by creating your first theater</p>
+    <p-button
+      size="small"
+      label="Create First Theater"
+      icon="pi pi-plus"
+      (onClick)="openCreateDialog()"
+    ></p-button>
+  </div>
+
+  <!-- Table with Data -->
+  <p-table *ngIf="theaters.length > 0" [value]="theaters" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Number of Screens</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-theater>
+      <tr>
+        <td>{{ theater.name }}</td>
+        <td>{{ theater.location }}</td>
+        <td>{{ theater.numberOfScreens }}</td>
+        <td class="flex flex-row">
+          <p-button
+            size="small"
+            label="Screens"
+            severity="success"
+            pTooltip="Manage Screens"
+            (onClick)="manageScreens(theater)"
+          ></p-button>
+          <div class="flex gap-2">
+            <p-button
+              size="small"
+              icon="pi pi-pencil"
+              [rounded]="true"
+              variant="outlined"
+              severity="info"
+              (onClick)="openEditDialog(theater)"
+            ></p-button>
+            <p-button
+              size="small"
+              icon="pi pi-trash"
+              [rounded]="true"
+              variant="outlined"
+              severity="danger"
+              (onClick)="deleteTheater(theater)"
+            ></p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Edit Theater' : 'Create Theater'"
+    [modal]="true"
+    [style]="{ width: '40vw' }"
+  >
+    <form [formGroup]="theaterForm" class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="name">Theater Name *</label>
+        <input id="name" type="text" pInputText formControlName="name" class="w-full" />
+        <small
+          class="text-red-500"
+          *ngIf="theaterForm.get('name')?.invalid && theaterForm.get('name')?.touched"
+        >
+          Name is required
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="location">Location *</label>
+        <input id="location" type="text" pInputText formControlName="location" class="w-full" />
+        <small
+          class="text-red-500"
+          *ngIf="theaterForm.get('location')?.invalid && theaterForm.get('location')?.touched"
+        >
+          Location is required
+        </small>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        size="small"
+        label="Cancel"
+        severity="secondary"
+        (onClick)="displayDialog = false"
+      ></p-button>
+      <p-button size="small" label="Save" (onClick)="saveTheater()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+</div>

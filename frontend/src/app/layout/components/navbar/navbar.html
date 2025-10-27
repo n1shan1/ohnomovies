@@ -1,0 +1,278 @@
+<header class="surface-card border-b border-surface-200 sticky top-0 z-50 shadow-sm">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a routerLink="/" class="flex items-center space-x-2 group">
+        <i
+          class="pi pi-ticket text-3xl text-primary-500 group-hover:scale-110 transition-transform"
+        ></i>
+        <span class="text-2xl font-bold">
+          <span class="text-primary-500">ohno</span><span class="text-orange-500">movies</span>
+        </span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-1">
+        @if (isAuthenticated$ | async) {
+        <!-- Authenticated User Links -->
+        <p-button
+          size="small"
+          label="Browse Movies"
+          icon="pi pi-film"
+          [text]="true"
+          routerLink="/movies"
+          routerLinkActive="!bg-primary-50 !text-primary-600"
+          styleClass="font-medium"
+        ></p-button>
+
+        <p-button
+          size="small"
+          label="My Bookings"
+          icon="pi pi-ticket"
+          [text]="true"
+          routerLink="/my-bookings"
+          routerLinkActive="!bg-primary-50 !text-primary-600"
+          styleClass="font-medium"
+        ></p-button>
+
+        <p-button
+          size="small"
+          label="About Us"
+          icon="pi pi-info-circle"
+          [text]="true"
+          routerLink="/about-us"
+          routerLinkActive="!bg-primary-50 !text-primary-600"
+          styleClass="font-medium"
+        ></p-button>
+
+        <p-button
+          size="small"
+          label="Contact"
+          icon="pi pi-phone"
+          [text]="true"
+          routerLink="/contact"
+          routerLinkActive="!bg-primary-50 !text-primary-600"
+          styleClass="font-medium"
+        ></p-button>
+
+        @if (isAdmin$ | async) {
+        <p-button
+          size="small"
+          label="Admin Panel"
+          icon="pi pi-cog"
+          severity="secondary"
+          [outlined]="true"
+          routerLink="/admin"
+          styleClass="ml-2"
+        ></p-button>
+        }
+
+        <!-- User Menu -->
+        <p-menu #menu [model]="profileMenuItems" [popup]="true" styleClass="mt-2"></p-menu>
+        <div class="ml-4 flex items-center space-x-3">
+          <p-avatar
+            [label]="getInitials(currentUser$ | async)"
+            styleClass="cursor-pointer hover:ring-2 hover:ring-primary-400 hover:ring-offset-2 transition-all"
+            shape="circle"
+            (click)="menu.toggle($event)"
+          ></p-avatar>
+        </div>
+        } @else {
+        <!-- Guest Links -->
+        <p-button
+          size="small"
+          label="Browse Movies"
+          icon="pi pi-film"
+          [text]="true"
+          routerLink="/movies"
+          styleClass="font-medium"
+        ></p-button>
+
+        <div class="flex items-center space-x-2 ml-4">
+          <p-button
+            size="small"
+            label="Sign In"
+            [text]="true"
+            (onClick)="navigate('/login')"
+            styleClass="font-medium"
+          ></p-button>
+          <p-button
+            size="small"
+            label="Get Started"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            (onClick)="navigate('/register')"
+          ></p-button>
+        </div>
+        }
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <p-button
+          size="small"
+          icon="pi pi-bars"
+          [text]="true"
+          [rounded]="true"
+          (onClick)="toggleMobileMenu()"
+        ></p-button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <p-drawer [(visible)]="mobileMenuVisible" position="right" styleClass="w-80">
+    <ng-template pTemplate="header">
+      <div class="flex items-center gap-2">
+        <i class="pi pi-ticket text-2xl text-primary-500"></i>
+        <span class="text-xl font-bold">
+          <span class="text-primary-500">ohno</span><span class="text-orange-500">movies</span>
+        </span>
+      </div>
+    </ng-template>
+
+    <div class="flex flex-col h-full">
+      @if (isAuthenticated$ | async; as isAuth) { @if (currentUser$ | async; as user) {
+      <!-- User Profile Section -->
+      <div
+        class="mb-6 p-4 bg-gradient-to-br from-primary-50 to-surface-50 rounded-lg border border-primary-200"
+      >
+        <div class="flex items-center gap-3 mb-2">
+          <p-avatar
+            [label]="getInitials(user)"
+            size="large"
+            shape="circle"
+            styleClass="!bg-primary-500 !text-white"
+          ></p-avatar>
+          <div class="flex-1">
+            <h3 class="font-bold text-surface-900">{{ user.firstName }} {{ user.lastName }}</h3>
+            <p class="text-sm text-surface-600">{{ user.email }}</p>
+          </div>
+        </div>
+        @if (user.role) {
+        <p-chip [label]="getRoleLabel(user)" [styleClass]="'!text-xs !py-1'"></p-chip>
+        }
+      </div>
+
+      <p-divider></p-divider>
+
+      <!-- Navigation Links -->
+      <div class="flex-1 space-y-1">
+        <button
+          (click)="navigateAndCloseMobile('/movies')"
+          class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-surface-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-film text-primary-600 text-lg"></i>
+          <span class="font-medium text-surface-900">Browse Movies</span>
+        </button>
+
+        <button
+          (click)="navigateAndCloseMobile('/my-bookings')"
+          class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-surface-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-ticket text-primary-600 text-lg"></i>
+          <span class="font-medium text-surface-900">My Bookings</span>
+        </button>
+
+        <button
+          (click)="navigateAndCloseMobile('/profile')"
+          class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-surface-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-user text-primary-600 text-lg"></i>
+          <span class="font-medium text-surface-900">My Profile</span>
+        </button>
+
+        <p-divider></p-divider>
+
+        <button
+          (click)="navigateAndCloseMobile('/about-us')"
+          class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-surface-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-info-circle text-surface-600 text-lg"></i>
+          <span class="text-surface-700">About Us</span>
+        </button>
+
+        <button
+          (click)="navigateAndCloseMobile('/contact')"
+          class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-surface-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-phone text-surface-600 text-lg"></i>
+          <span class="text-surface-700">Contact</span>
+        </button>
+
+        @if (user.role === Role.ADMIN) {
+        <p-divider></p-divider>
+        <button
+          (click)="navigateAndCloseMobile('/admin')"
+          class="w-full flex items-center gap-3 px-4 py-3 text-left bg-surface-900 text-white rounded-lg hover:bg-surface-800 transition-colors"
+        >
+          <i class="pi pi-cog text-lg"></i>
+          <span class="font-semibold">Admin Panel</span>
+        </button>
+        }
+      </div>
+
+      <!-- Sign Out Button -->
+      <div class="mt-auto pt-4 border-t border-surface-200">
+        <p-button
+          label="Sign Out"
+          icon="pi pi-sign-out"
+          severity="danger"
+          [outlined]="true"
+          styleClass="w-full"
+          (onClick)="logout()"
+        ></p-button>
+      </div>
+      } } @else {
+      <!-- Guest Menu -->
+      <div class="flex flex-col h-full">
+        <div class="flex-1 space-y-1">
+          <button
+            (click)="navigateAndCloseMobile('/movies')"
+            class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-surface-100 rounded-lg transition-colors"
+          >
+            <i class="pi pi-film text-primary-600 text-lg"></i>
+            <span class="font-medium text-surface-900">Browse Movies</span>
+          </button>
+
+          <p-divider></p-divider>
+
+          <button
+            (click)="navigateAndCloseMobile('/about-us')"
+            class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-surface-100 rounded-lg transition-colors"
+          >
+            <i class="pi pi-info-circle text-surface-600 text-lg"></i>
+            <span class="text-surface-700">About Us</span>
+          </button>
+
+          <button
+            (click)="navigateAndCloseMobile('/contact')"
+            class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-surface-100 rounded-lg transition-colors"
+          >
+            <i class="pi pi-phone text-surface-600 text-lg"></i>
+            <span class="text-surface-700">Contact</span>
+          </button>
+        </div>
+
+        <!-- Auth Buttons -->
+        <div class="mt-auto pt-4 space-y-2 border-t border-surface-200">
+          <p-button
+            label="Sign In"
+            icon="pi pi-sign-in"
+            [outlined]="true"
+            styleClass="w-full"
+            (onClick)="navigateAndCloseMobile('/login')"
+          ></p-button>
+          <p-button
+            label="Get Started"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            styleClass="w-full"
+            (onClick)="navigateAndCloseMobile('/register')"
+          ></p-button>
+        </div>
+      </div>
+      }
+    </div>
+  </p-drawer>
+</header>

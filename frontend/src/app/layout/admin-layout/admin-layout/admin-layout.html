@@ -1,0 +1,125 @@
+<div class="min-h-screen flex surface-ground">
+  <!-- Sidebar -->
+  <aside
+    class="flex flex-col surface-card border-r border-surface-200 shadow-md transition-all duration-300"
+    [ngClass]="sidebarCollapsed ? 'w-20' : 'w-72'"
+  >
+    <!-- Header -->
+    <div class="p-6 border-b border-surface-200">
+      <div class="flex items-center justify-between gap-3">
+        @if (!sidebarCollapsed) {
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-lg bg-primary-500 flex items-center justify-center shadow-lg"
+          >
+            <i class="pi pi-shield text-white text-xl"></i>
+          </div>
+          <div>
+            <p class="text-lg font-bold text-surface-900">Admin Panel</p>
+            <p class="text-xs text-surface-500">Management Console</p>
+          </div>
+        </div>
+        }
+        <p-button
+          [icon]="sidebarCollapsed ? 'pi pi-angle-right' : 'pi pi-angle-left'"
+          [text]="true"
+          [rounded]="true"
+          size="small"
+          (onClick)="toggleSidebar()"
+          pTooltip="Toggle Sidebar"
+          tooltipPosition="right"
+        ></p-button>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 p-4 overflow-y-auto">
+      <div class="space-y-1">
+        @for (item of navItems; track $index) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="!bg-primary-500 !text-white shadow-md"
+          class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-100 transition-all cursor-pointer group text-surface-700 hover:text-surface-900"
+          [pTooltip]="sidebarCollapsed ? item.label : ''"
+          tooltipPosition="right"
+        >
+          <i class="pi {{ item.icon }} text-lg"></i>
+          @if (!sidebarCollapsed) {
+          <span class="font-medium">{{ item.label }}</span>
+          } @if (item.badge && !sidebarCollapsed) {
+          <p-badge [value]="item.badge" severity="danger" styleClass="ml-auto"></p-badge>
+          }
+        </a>
+        }
+      </div>
+    </nav>
+
+    <!-- User Section -->
+    <div class="p-4 border-t border-surface-200">
+      <p-menu #userMenu [model]="userMenuItems" [popup]="true" styleClass="mt-2"></p-menu>
+
+      <div
+        class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-100 cursor-pointer transition-all"
+        (click)="userMenu.toggle($event)"
+      >
+        <p-avatar
+          [label]="getInitials(currentUser$ | async)"
+          shape="circle"
+          styleClass="bg-primary-100 text-primary-700"
+        ></p-avatar>
+        @if (!sidebarCollapsed) {
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-surface-900 truncate">
+            {{ (currentUser$ | async)?.firstName }} {{ (currentUser$ | async)?.lastName }}
+          </p>
+          <p class="text-xs text-surface-500 truncate">{{ (currentUser$ | async)?.email }}</p>
+        </div>
+        <i class="pi pi-ellipsis-v text-surface-400"></i>
+        }
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Top Bar -->
+    <header class="h-16 surface-card border-b border-surface-200 shadow-sm px-6 flex items-center">
+      <div class="flex items-center justify-between w-full">
+        <div class="flex items-center gap-4">
+          <h1 class="text-xl font-bold text-surface-900">
+            <i class="pi pi-shield text-primary-500 mr-2"></i>
+            Admin Dashboard
+          </h1>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- <p-button
+            icon="pi pi-cog"
+            [text]="true"
+            [rounded]="true"
+            severity="secondary"
+            pTooltip="Settings"
+          ></p-button> -->
+
+          <p-badge value="{{ (currentUser$ | async)?.role?.slice(5) }}"></p-badge>
+          <p></p>
+
+          <div class="h-8 w-px bg-surface-200 mx-2"></div>
+
+          <p-button
+            label="Back to Site"
+            icon="pi pi-arrow-left"
+            [text]="true"
+            size="small"
+            routerLink="/"
+          ></p-button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

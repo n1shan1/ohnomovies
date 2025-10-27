@@ -1,0 +1,175 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Movie Management</h1>
+    <p-button
+      size="small"
+      label="Create Movie"
+      icon="pi pi-plus"
+      (onClick)="openCreateDialog()"
+    ></p-button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="movies.length === 0" class="flex flex-col items-center justify-center py-16">
+    <i class="pi pi-video text-6xl text-gray-300 mb-4"></i>
+    <h2 class="text-2xl font-semibold text-gray-600 mb-2">No Movies Yet</h2>
+    <p class="text-gray-500 mb-6">Get started by creating your first movie</p>
+    <p-button
+      size="small"
+      label="Create First Movie"
+      icon="pi pi-plus"
+      (onClick)="openCreateDialog()"
+    ></p-button>
+  </div>
+
+  <!-- Table with Data -->
+  <p-table *ngIf="movies.length > 0" [value]="movies" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Title</th>
+        <th>Language</th>
+        <th>Duration (min)</th>
+        <th>Release Date</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-movie>
+      <tr>
+        <td>{{ movie.title }}</td>
+        <td>{{ movie.language }}</td>
+        <td>{{ movie.durationInMinutes }}</td>
+        <td>{{ movie.releaseDate }}</td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            severity="info"
+            (onClick)="openEditDialog(movie)"
+          ></p-button>
+          <p-button
+            icon="pi pi-trash"
+            [rounded]="true"
+            [text]="true"
+            severity="danger"
+            (onClick)="deleteMovie(movie)"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Edit Movie' : 'Create Movie'"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+  >
+    <form [formGroup]="movieForm" class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="title">Title *</label>
+        <input id="title" type="text" pInputText formControlName="title" class="w-full" />
+        <small
+          class="text-red-500"
+          *ngIf="movieForm.get('title')?.invalid && movieForm.get('title')?.touched"
+        >
+          Title is required
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="description">Description *</label>
+        <textarea
+          id="description"
+          rows="4"
+          pTextarea
+          formControlName="description"
+          placeholder="Enter movie description"
+        ></textarea>
+        <small
+          class="text-red-500"
+          *ngIf="movieForm.get('description')?.invalid && movieForm.get('description')?.touched"
+        >
+          Description is required
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="posterUrl">Poster URL *</label>
+        <input id="posterUrl" type="text" pInputText formControlName="posterUrl" class="w-full" />
+        <small
+          class="text-red-500"
+          *ngIf="movieForm.get('posterUrl')?.invalid && movieForm.get('posterUrl')?.touched"
+        >
+          Poster URL is required
+        </small>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <label for="releaseDate">Release Date *</label>
+          <p-datepicker
+            id="releaseDate"
+            formControlName="releaseDate"
+            [showIcon]="true"
+            dateFormat="yy-mm-dd"
+            placeholder="Select release date"
+          />
+          <small
+            class="text-red-500"
+            *ngIf="movieForm.get('releaseDate')?.invalid && movieForm.get('releaseDate')?.touched"
+          >
+            Release date is required
+          </small>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="durationInMinutes">Duration (min) *</label>
+          <p-inputNumber
+            id="durationInMinutes"
+            formControlName="durationInMinutes"
+            [min]="1"
+            [useGrouping]="false"
+            placeholder="120"
+            class="w-full"
+          ></p-inputNumber>
+          <small
+            class="text-red-500"
+            *ngIf="
+              movieForm.get('durationInMinutes')?.invalid &&
+              movieForm.get('durationInMinutes')?.touched
+            "
+          >
+            Duration is required
+          </small>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="language">Language *</label>
+        <input
+          id="language"
+          type="text"
+          pInputText
+          formControlName="language"
+          class="w-full"
+          placeholder="English"
+        />
+        <small
+          class="text-red-500"
+          *ngIf="movieForm.get('language')?.invalid && movieForm.get('language')?.touched"
+        >
+          Language is required
+        </small>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" severity="secondary" (onClick)="displayDialog = false"></p-button>
+      <p-button label="Save" (onClick)="saveMovie()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+</div>
