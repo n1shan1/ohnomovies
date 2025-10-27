@@ -1,21 +1,84 @@
-/target/
+# ===================================
+# Maven Build Output
+# ===================================
+target/
 !.mvn/wrapper/maven-wrapper.jar
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
+# ===================================
+# Compiled Files
+# ===================================
+*.class
+
+# ===================================
+# Package Files
+# ===================================
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# ===================================
+# Log Files
+# ===================================
+*.log
+hs_err_pid*
+replay_pid*
+
+# ===================================
+# Maven
+# ===================================
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+.flattened-pom.xml
+
+# ===================================
+# Gradle (if used)
+# ===================================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ===================================
+# Spring Boot
+# ===================================
 .springBeans
-.sts4-cache
+.sts4-cache/
 
+# ===================================
+# IntelliJ IDEA
+# ===================================
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
 
-# Created by https://www.gitignore.io/api/git,java,maven,eclipse,windows
-
-### Eclipse ###
-
+# ===================================
+# Eclipse
+# ===================================
 .metadata
+.classpath
+.project
+.settings/
+.factorypath
+.loadpath
+.recommenders/
+.apt_generated/
+.cache-main
+.scala_dependencies
+.worksheet
 bin/
 tmp/
 *.tmp
@@ -23,9 +86,6 @@ tmp/
 *.swp
 *~.nib
 local.properties
-.settings/
-.loadpath
-.recommenders
 
 # External tool builders
 .externalToolBuilders/
@@ -42,12 +102,6 @@ local.properties
 # CDT- autotools
 .autotools
 
-# Java annotation processor (APT)
-.factorypath
-
-# PDT-specific (PHP Development Tools)
-.buildpath
-
 # sbteclipse plugin
 .target
 
@@ -57,38 +111,69 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
-# STS (Spring Tool Suite)
-.springBeans
-
 # Code Recommenders
 .recommenders/
 
 # Annotation Processing
-.apt_generated/
+.apt_generated
+.apt_generated_test/
 
 # Scala IDE specific (Scala & Java development for Eclipse)
 .cache-main
 .scala_dependencies
 .worksheet
 
-### Eclipse Patch ###
-# Eclipse Core
-.project
+# ===================================
+# NetBeans
+# ===================================
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
+# ===================================
+# VS Code
+# ===================================
+.vscode/
+*.code-workspace
 
-# Annotation Processing
-.apt_generated
+# ===================================
+# macOS
+# ===================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
 
-.sts4-cache/
+# ===================================
+# Windows
+# ===================================
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
 
-### Git ###
-# Created by git for backups. To disable backups in Git:
-# $ git config --global mergetool.keepBackup false
+# ===================================
+# Linux
+# ===================================
+*~
+.directory
+.Trash-*
+
+# ===================================
+# Git
+# ===================================
 *.orig
-
-# Created by git when using merge tools for conflicts
 *.BACKUP.*
 *.BASE.*
 *.LOCAL.*
@@ -98,104 +183,28 @@ local.properties
 *_LOCAL_*.txt
 *_REMOTE_*.txt
 
-### Java ###
-# Compiled class file
-*.class
+# ===================================
+# Environment Variables
+# ===================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Log file
-*.log
+# ===================================
+# Testing & Coverage
+# ===================================
+/coverage/
+.nyc_output
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-### Maven ###
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
-
-### Windows ###
-# Windows thumbnail cache files
-Thumbs.db
-ehthumbs.db
-ehthumbs_vista.db
-
-# Dump file
-*.stackdump
-
-# Folder config file
-[Dd]esktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-### Some additional ignores (sort later)
-*.DS_Store
+# ===================================
+# Miscellaneous
+# ===================================
 *.sw?
 .#*
 *#
-*~
-.classpath
-.project
-.settings
-bin
-build
-target
-dependency-reduced-pom.xml
 *.sublime-*
 /scratch
-.gradle
 README.html
-*.iml
-.idea
 .exercism
