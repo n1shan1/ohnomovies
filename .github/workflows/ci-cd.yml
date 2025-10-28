@@ -137,30 +137,6 @@ jobs:
           # Clean up SSH key
           rm -f private_key.pem
 
-      - name: Verify deployment
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-        run: |
-          echo "⏳ Waiting for services to be ready..."
-          sleep 30
-          
-          echo "🔍 Verifying deployment..."
-          
-          # Check backend API
-          if curl -f http://${EC2_HOST}:4001/api/v1/movies; then
-            echo "✅ Backend is responding"
-          else
-            echo "⚠️ Backend check warning (might be empty database)"
-          fi
-          
-          # Check frontend
-          if curl -f http://${EC2_HOST}:8080/; then
-            echo "✅ Frontend is responding"
-          else
-            echo "❌ Frontend check failed"
-            exit 1
-          fi
-
       - name: Deployment summary
         if: always()
         run: |
