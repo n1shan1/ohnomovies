@@ -30,9 +30,8 @@ public class SecurityConfig {
                 // 1. Configure CORS
                 .cors(cors -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(
-                            List.of("*"));
-                    config.setAllowedMethods(List.of("*"));
+                    config.setAllowedOriginPatterns(List.of("*")); // Allow all origins
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true); // Allow cookies for cross-origin requests
                     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
