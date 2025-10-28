@@ -10,6 +10,26 @@ target/
 *.zip
 *.tar.gz
 *.rar
+*.hcl
+# Terraform-specific files within the 'terraform' subdirectory
+/terraform/.terraform/
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.backup
+/terraform/*.tfvars
+/terraform/*.tfplan
+
+# Global ignore rules that apply everywhere
+# Sensitive variable definition files
+*.tfvars
+*.tfvars.json
+
+# Crash log files from Terraform
+crash.log
+
+# Terraform CLI configuration files
+.terraformrc
+terraform.rc
+
 
 # Maven wrapper
 .mvn/

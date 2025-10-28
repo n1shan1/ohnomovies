@@ -70,7 +70,7 @@ resource "aws_instance" "ohnomovies_server" {
 
   root_block_device {
     volume_size = 30
-    volume_type = "gp3"
+    volume_type = "gp2" # Free tier: 30 GB of EBS gp2 storage
   }
 
   user_data = file("${path.module}/user-data.sh")
