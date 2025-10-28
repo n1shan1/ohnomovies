@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .cors(cors -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(
-                            List.of("http://localhost:4200", "http://localhost:8080", "http://127.0.0.1:8080"));
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                            List.of("*"));
+                    config.setAllowedMethods(List.of("*"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true); // Allow cookies for cross-origin requests
                     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -56,7 +56,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/movies/**").permitAll()
                         .requestMatchers("/api/v1/theaters/**").permitAll()
                         .requestMatchers("/api/v1/showtimes/**").permitAll()
-                        .requestMatchers("/actuator/health/**").permitAll()
                         .requestMatchers("/api/v1/bookings/**").authenticated()
                         .anyRequest().authenticated())
                 // 4. Set session management to STATELESS
