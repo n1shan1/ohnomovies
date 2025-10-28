@@ -49,24 +49,6 @@ resource "aws_security_group" "ohnomovies_sg" {
     description = "HTTPS access"
   }
 
-  # Frontend access
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Frontend access"
-  }
-
-  # Backend API access
-  ingress {
-    from_port   = 4001
-    to_port     = 4001
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Backend API access"
-  }
-
   # Outbound internet access
   egress {
     from_port   = 0
