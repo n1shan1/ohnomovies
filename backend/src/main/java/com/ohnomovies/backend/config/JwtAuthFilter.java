@@ -30,24 +30,30 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
 
-        // 1. Check for token
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        // 1. Check for token in Authorization header first
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7); // "Bearer ".length()
+        } else {
+            // 2. Check for token in HttpOnly cookie
+            jakarta.servlet.http.Cookie[] cookies = request.getCookies();
+            jwt = getJwtFromCookies(cookies);
+        }
+
+        if (jwt == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 2. Extract token
-        jwt = authHeader.substring(7); // "Bearer ".length()
+        // 3. Extract username and validate token
         userEmail = jwtService.extractUsername(jwt);
 
-        // 3. Validate token and set SecurityContext
+        // 4. Validate token and set SecurityContext
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
@@ -55,12 +61,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null, // We don't have credentials
-                        userDetails.getAuthorities()
-                );
+                        userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private String getJwtFromCookies(jakarta.servlet.http.Cookie[] cookies) {
+        if (cookies != null) {
+            for (jakarta.servlet.http.Cookie cookie : cookies) {
+                if ("jwt_token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

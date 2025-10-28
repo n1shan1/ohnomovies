@@ -33,7 +33,7 @@ public class SecurityConfig {
                     config.setAllowedOrigins(List.of("http://localhost:4200", "deploymentURL"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
-                    config.setAllowCredentials(false);
+                    config.setAllowCredentials(true); // Allow cookies for cross-origin requests
                     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                     source.registerCorsConfiguration("/**", config);
                     cors.configurationSource(source);
@@ -49,11 +49,13 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html")
                         .permitAll()
-
                         .requestMatchers("/h2-console/**").permitAll()
                         // Protected routes
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN").requestMatchers("/api/v1/movies/**")
-                        .permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/movies/**").permitAll()
+                        .requestMatchers("/api/v1/theaters/**").permitAll()
+                        .requestMatchers("/api/v1/showtimes/**").permitAll()
+                        .requestMatchers("/actuator/health/**").permitAll()
                         .requestMatchers("/api/v1/bookings/**").authenticated()
                         .anyRequest().authenticated())
                 // 4. Set session management to STATELESS

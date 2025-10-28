@@ -138,6 +138,10 @@ tmp/
 .pnp
 .pnp.js
 *.tgz
+terraform/terraform.tfvars
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
 
 # Editor backup files
 *.orig

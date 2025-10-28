@@ -44,7 +44,7 @@ export class AuthService {
         this.currentUserSubject.next(user);
         this.isAuthenticatedSubject.next(true);
       } catch (error) {
-        // Token is invalid or expired
+        // Invalid token, clear storage
         this.storageService.clearAll();
       }
     }
@@ -53,7 +53,7 @@ export class AuthService {
   login(request: LoginRequest): Observable<AuthResponse> {
     return this.apiService.post<AuthResponse>('/auth/login', request).pipe(
       tap((response) => {
-        this.handleAuthSuccess(response.token);
+        this.handleAuthSuccess(response);
       })
     );
   }
@@ -61,16 +61,28 @@ export class AuthService {
   register(request: RegisterRequest): Observable<AuthResponse> {
     return this.apiService.post<AuthResponse>('/auth/register', request).pipe(
       tap((response) => {
-        this.handleAuthSuccess(response.token);
+        this.handleAuthSuccess(response);
       })
     );
   }
 
   logout(): void {
-    this.storageService.clearAll();
-    this.currentUserSubject.next(null);
-    this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/']);
+    // Call logout endpoint to clear the HttpOnly cookie
+    this.apiService.post('/auth/logout', {}).subscribe({
+      next: () => {
+        this.storageService.clearAll();
+        this.currentUserSubject.next(null);
+        this.isAuthenticatedSubject.next(false);
+        this.router.navigate(['/']);
+      },
+      error: () => {
+        // Even if logout fails, clear local state
+        this.storageService.clearAll();
+        this.currentUserSubject.next(null);
+        this.isAuthenticatedSubject.next(false);
+        this.router.navigate(['/']);
+      },
+    });
   }
 
   /**
@@ -89,11 +101,12 @@ export class AuthService {
     }
   }
 
-  private handleAuthSuccess(token: string): void {
+  private handleAuthSuccess(response: AuthResponse): void {
     try {
-      const user = this.decodeToken(token);
+      const user = this.decodeToken(response.token);
 
-      this.storageService.setToken(token);
+      // Store both token and user info
+      this.storageService.setToken(response.token);
       this.storageService.setUser(user);
       this.currentUserSubject.next(user);
       this.isAuthenticatedSubject.next(true);

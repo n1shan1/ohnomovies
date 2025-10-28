@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ApiService } from '../../../core/services/api.service';
+import { environment } from '../../../../env/env';
 import {
   ShowtimeDto,
   ShowtimeSeatDto,
@@ -16,7 +18,7 @@ import {
 export class BookingService {
   private readonly BOOKING_FEE = 25; // ₹25 convenience fee per booking
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private http: HttpClient) {}
 
   // Fetch showtime details (price, movie, etc.)
   getShowtimeDetails(showtimeId: number): Observable<ShowtimeDto> {
@@ -58,6 +60,17 @@ export class BookingService {
     if (selectedSeatsCount <= 0 || !ticketPrice) return 0;
     const subtotal = selectedSeatsCount * ticketPrice;
     return subtotal + this.BOOKING_FEE;
+  }
+
+  // Confirm payment and complete booking
+  confirmPaymentAndBooking(confirmData: {
+    bookingUuid: string;
+    paymentIntentId: string;
+    paymentMethod: string;
+  }): Observable<string> {
+    return this.http.post(`${environment.apiUrl}/payments/confirm`, confirmData, {
+      responseType: 'text',
+    });
   }
 
   // Get booking fee

@@ -9,6 +9,11 @@ export const BOOKING_ROUTES: Routes = [
       import('./pages/seat-selection/seat-selection').then((m) => m.SeatSelectionComponent),
   },
   {
+    path: 'payment',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/payment/payment').then((m) => m.PaymentComponent),
+  },
+  {
     path: 'ticket/:uuid',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/ticket/ticket').then((m) => m.TicketComponent),

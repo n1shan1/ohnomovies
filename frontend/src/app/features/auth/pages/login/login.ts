@@ -60,7 +60,13 @@ export class Login {
       },
       error: (err) => {
         this.isLoading = false;
-        // The error interceptor will show the toast message
+        // Show error feedback for login failure
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Login Failed',
+          detail: err.error?.message || 'Invalid email or password. Please try again.',
+          life: 5000,
+        });
       },
     });
   }

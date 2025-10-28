@@ -68,7 +68,6 @@ export class MovieManagementComponent implements OnInit {
         this.movies = movies;
       },
       error: (err) => {
-        console.error('Error loading movies:', err);
         // Don't show error toast for empty data - handled in template
       },
     });

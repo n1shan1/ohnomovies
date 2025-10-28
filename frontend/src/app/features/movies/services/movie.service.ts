@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { ApiService } from '../../../core/services/api.service';
 
 export interface Movie {
@@ -39,17 +38,7 @@ export class MovieService {
   constructor(private apiService: ApiService) {}
 
   getAllMovies(): Observable<Movie[]> {
-    return this.apiService.get<Movie[]>('/movies').pipe(
-      tap({
-        error: (error) => {
-          console.error('[MovieService] getAllMovies error', {
-            status: error.status,
-            message: error.message,
-            error: error.error,
-          });
-        },
-      })
-    );
+    return this.apiService.get<Movie[]>('/movies');
   }
 
   getMovieById(id: number): Observable<Movie> {

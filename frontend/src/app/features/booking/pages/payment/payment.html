@@ -1,0 +1,144 @@
+<div class="payment-container">
+  <p-toast></p-toast>
+
+  <div class="payment-header">
+    <h2>Secure Payment</h2>
+    <p>Complete your booking by entering your payment details</p>
+  </div>
+
+  <div class="booking-summary-card">
+    <p-card header="Booking Summary">
+      <div class="summary-content" *ngIf="showtime">
+        <div class="movie-info">
+          <h3>{{ showtime.movieTitle }}</h3>
+          <p>{{ showtime.theaterName }} - {{ showtime.screenName }}</p>
+          <p>{{ showtime.startTime | date : 'medium' }}</p>
+        </div>
+        <div class="seats-info">
+          <p><strong>Seats:</strong> {{ selectedSeats.length }}</p>
+          <p><strong>Total Amount:</strong> ₹{{ totalAmount }}</p>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <div class="payment-form-card">
+    <p-card header="Payment Details">
+      <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="payment-form">
+        <!-- Card Number -->
+        <div class="form-field">
+          <label for="cardNumber">Card Number *</label>
+          <input
+            pInputText
+            id="cardNumber"
+            formControlName="cardNumber"
+            placeholder="1234 5678 9012 3456"
+            (input)="formatCardNumber($event)"
+            maxlength="19"
+            class="card-input"
+            [class.ng-invalid]="cardNumber?.invalid && cardNumber?.touched"
+          />
+          <small class="error-message" *ngIf="cardNumber?.invalid && cardNumber?.touched">
+            Please enter a valid card number (format: 1234 5678 9012 3456)
+          </small>
+        </div>
+
+        <!-- Expiry Date -->
+        <div class="form-row">
+          <div class="form-field">
+            <label for="expiryMonth">Expiry Month *</label>
+            <input
+              pInputText
+              id="expiryMonth"
+              formControlName="expiryMonth"
+              placeholder="MM"
+              maxlength="2"
+              class="expiry-input"
+              [class.ng-invalid]="expiryMonth?.invalid && expiryMonth?.touched"
+            />
+            <small class="error-message" *ngIf="expiryMonth?.invalid && expiryMonth?.touched">
+              Invalid month (01-12)
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label for="expiryYear">Expiry Year *</label>
+            <input
+              pInputText
+              id="expiryYear"
+              formControlName="expiryYear"
+              placeholder="YY"
+              maxlength="2"
+              class="expiry-input"
+              [class.ng-invalid]="expiryYear?.invalid && expiryYear?.touched"
+            />
+            <small class="error-message" *ngIf="expiryYear?.invalid && expiryYear?.touched">
+              Invalid year
+            </small>
+          </div>
+        </div>
+
+        <!-- CVV -->
+        <div class="form-field">
+          <label for="cvv">CVV *</label>
+          <input
+            pInputText
+            id="cvv"
+            formControlName="cvv"
+            placeholder="123"
+            maxlength="4"
+            type="password"
+            class="cvv-input"
+            [class.ng-invalid]="cvv?.invalid && cvv?.touched"
+          />
+          <small class="error-message" *ngIf="cvv?.invalid && cvv?.touched">
+            CVV must be 3-4 digits
+          </small>
+        </div>
+
+        <!-- Cardholder Name -->
+        <div class="form-field">
+          <label for="cardholderName">Cardholder Name *</label>
+          <input
+            pInputText
+            id="cardholderName"
+            formControlName="cardholderName"
+            placeholder="John Doe"
+            class="name-input"
+            [class.ng-invalid]="cardholderName?.invalid && cardholderName?.touched"
+          />
+          <small class="error-message" *ngIf="cardholderName?.invalid && cardholderName?.touched">
+            Name must be 2-50 characters
+          </small>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="security-notice">
+          <i class="pi pi-shield"></i>
+          <span>Your payment information is encrypted and secure</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <p-button
+            label="Back"
+            icon="pi pi-arrow-left"
+            type="button"
+            styleClass="p-button-secondary"
+            (onClick)="goBack()"
+            [disabled]="isProcessing"
+          ></p-button>
+
+          <p-button
+            label="Pay Now"
+            icon="pi pi-credit-card"
+            type="submit"
+            styleClass="p-button-success"
+            [loading]="isProcessing"
+            [disabled]="paymentForm.invalid || isProcessing"
+          ></p-button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>

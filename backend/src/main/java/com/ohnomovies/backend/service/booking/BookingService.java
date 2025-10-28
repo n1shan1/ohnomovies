@@ -33,5 +33,8 @@ public interface BookingService {
     BookingVerificationResponse verifyBooking(UUID uuid);
 
     @Transactional
+    void confirmPaymentAndBooking(UUID bookingUuid, String paymentIntentId, String paymentMethod);
+
+    @Transactional
     void cancelBooking(UUID uuid);
 }

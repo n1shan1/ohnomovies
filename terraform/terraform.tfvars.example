@@ -1,0 +1,9 @@
+# Terraform Variables Configuration
+# Copy this file to terraform.tfvars and fill in your values
+
+# AWS Configuration
+aws_region    = "us-east-1"
+instance_type = "t2.micro"  # Free tier eligible
+
+# SSH Key Configuration
+key_name = "your-ec2-key-pair-name"  # Your AWS EC2 key pair name (without .pem)

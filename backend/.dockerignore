@@ -1,0 +1,36 @@
+# Compiled classes
+target/
+*.class
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Docker
+Dockerfile
+docker-compose*.yml
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+HELP.md
+README.md
+
+# Test files
+src/test/

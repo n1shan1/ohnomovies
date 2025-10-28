@@ -45,7 +45,6 @@ export class TicketComponent implements OnInit {
   ngOnInit(): void {
     const uuid = this.route.snapshot.paramMap.get('uuid');
     if (!uuid) {
-      console.error('[Ticket] No UUID in route');
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -67,7 +66,6 @@ export class TicketComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('[Ticket] Error loading booking:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -138,7 +136,6 @@ export class TicketComponent implements OnInit {
 
   async downloadPDF(): Promise<void> {
     if (!this.ticketContent || !this.booking) {
-      console.error('[Ticket] Cannot download - missing data');
       return;
     }
 
@@ -232,7 +229,6 @@ export class TicketComponent implements OnInit {
             currentY += 60;
           }
         } catch (e) {
-          console.warn('[Ticket] Could not add QR code to PDF:', e);
           pdf.text(this.booking.bookingUuid, margin, currentY);
           currentY += lineHeight;
         }
@@ -251,7 +247,6 @@ export class TicketComponent implements OnInit {
         detail: 'Ticket downloaded successfully',
       });
     } catch (error) {
-      console.error('[Ticket] PDF download failed:', error);
       this.messageService.add({
         severity: 'error',
         summary: 'Error',

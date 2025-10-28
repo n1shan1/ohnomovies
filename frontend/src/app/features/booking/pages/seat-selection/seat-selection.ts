@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { BookingService } from '../../services/booking.service';
+import { MovieService } from '../../../movies/services/movie.service';
 import { ShowtimeSeatDto, ShowtimeDto } from '../../../../core/models/backend-dtos';
 import { SeatGridComponent } from '../../components/seat-grid/seat-grid.component';
 import { BookingSummaryCardComponent } from '../../components/booking-summary-card/booking-summary-card.component';
@@ -45,13 +46,13 @@ export class SeatSelectionComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private bookingService: BookingService,
+    private movieService: MovieService,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('showtimeId');
     if (!id) {
-      console.error('[SeatSelection] No showtimeId in route');
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -70,7 +71,7 @@ export class SeatSelectionComponent implements OnInit {
 
     // Use forkJoin to fetch both showtime details and seat map concurrently
     forkJoin({
-      showtime: this.bookingService.getShowtimeDetails(this.showtimeId),
+      showtime: this.movieService.getShowtimeById(this.showtimeId),
       seats: this.bookingService.getSeatMap(this.showtimeId),
     }).subscribe({
       next: ({ showtime, seats }) => {
@@ -79,7 +80,6 @@ export class SeatSelectionComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('[SeatSelection] Error loading data:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -118,25 +118,37 @@ export class SeatSelectionComponent implements OnInit {
     this.bookingService
       .lockSeats(seatIds)
       .pipe(
-        // PHASE 2: Create booking only if lock succeeds
-        switchMap(() => this.bookingService.createBooking(seatIds))
+        // PHASE 2: Navigate to payment instead of direct booking
+        switchMap(() => {
+          this.isBooking = false;
+          // Calculate total amount
+          const totalAmount = this.selectedSeats.length * (this.showtime?.price || 0) + 50; // Add booking fee
+          // Navigate to payment page with state
+          this.router.navigate(['/booking/payment'], {
+            state: {
+              showtime: this.showtime,
+              selectedSeats: seatIds,
+              totalAmount: totalAmount,
+            },
+          });
+          // Also store in localStorage as backup
+          localStorage.setItem(
+            'paymentData',
+            JSON.stringify({
+              showtime: this.showtime,
+              selectedSeats: seatIds,
+              totalAmount: totalAmount,
+              timestamp: Date.now(),
+            })
+          );
+          return []; // Return empty observable since we're navigating
+        })
       )
       .subscribe({
-        next: (bookingResponse) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Booking confirmed! Redirecting to your ticket...',
-          });
-          this.isBooking = false;
-
-          // Navigate to ticket page
-          setTimeout(() => {
-            this.router.navigate(['/ticket', bookingResponse.bookingUuid]);
-          }, 1000);
+        next: () => {
+          // Navigation handled above
         },
         error: (error) => {
-          console.error('[SeatSelection] Booking failed:', error);
           this.isBooking = false;
 
           // Handle specific error cases
@@ -198,7 +210,6 @@ export class SeatSelectionComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('[SeatSelection] Error refreshing seats:', error);
         this.isLoading = false;
       },
     });

@@ -34,7 +34,6 @@ export class BookingManagementComponent implements OnInit {
         this.bookings = bookings;
       },
       error: (err) => {
-        console.error('Error loading bookings:', err);
         // Don't show error toast for empty data - handled in template
       },
     });

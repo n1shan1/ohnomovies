@@ -44,7 +44,9 @@ export class AdminDashboardComponent implements OnInit {
         this.stats.showtimes = data.showtimes.length;
         this.stats.bookings = data.bookings.length;
       },
-      error: (err) => console.error('Error loading stats:', err),
+      error: (err) => {
+        // Error loading stats - handled silently
+      },
     });
   }
 }

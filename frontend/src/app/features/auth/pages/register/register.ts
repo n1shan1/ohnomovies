@@ -90,7 +90,13 @@ export class Register {
       },
       error: (err) => {
         this.isLoading = false;
-        // Error interceptor or the service should show the toast; keep UI responsive
+        // Show error feedback for registration failure
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Registration Failed',
+          detail: err.error?.message || 'Registration failed. Please try again.',
+          life: 5000,
+        });
       },
     });
   }

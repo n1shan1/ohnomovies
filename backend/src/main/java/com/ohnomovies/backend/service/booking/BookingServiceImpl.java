@@ -136,7 +136,7 @@ public class BookingServiceImpl implements BookingService {
         booking.addLineItem(fee);
         totalAmount = totalAmount.add(BOOKING_FEE);
 
-        // --- 3. Mock Payment ---
+        // --- 3. Create Payment (will be processed separately via payment service)
         Payment payment = new Payment();
         // Link payment to booking (bidirectional)
         payment.setBooking(booking);
@@ -144,12 +144,9 @@ public class BookingServiceImpl implements BookingService {
 
         payment.setAmount(totalAmount);
         payment.setCurrency(Currency.INR); // Default currency
-        payment.setPaymentGatewayId("MOCK_" + UUID.randomUUID().toString()); // Mock ID
-        payment.setStatus(PaymentStatus.SUCCESS); // Assume success for mock
-        payment.setPaymentMethod("Mocked Card");
-
-        // --- 4. Finalize Booking Status ---
-        booking.setBookingStatus(BookingStatus.CONFIRMED);
+        payment.setPaymentGatewayId("PENDING_" + UUID.randomUUID().toString()); // Will be updated after payment
+        payment.setStatus(PaymentStatus.PENDING); // Start as PENDING, will be updated after payment
+        payment.setPaymentMethod("pending");
 
         // --- 5. Save Booking (cascades to Payment and LineItems) ---
         Booking savedBooking = bookingRepository.save(booking);
@@ -291,5 +288,41 @@ public class BookingServiceImpl implements BookingService {
             log.warn("Attempted to cancel booking {} with status {}", uuid, booking.getBookingStatus());
             throw new BookingException("Only confirmed bookings can be cancelled.");
         }
+    }
+
+    @Transactional
+    @Override
+    public void confirmPaymentAndBooking(UUID bookingUuid, String paymentIntentId, String paymentMethod) {
+        log.info("Confirming payment and booking for UUID {}", bookingUuid);
+
+        Booking booking = bookingRepository.findByBookingUuid(bookingUuid)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with UUID: " + bookingUuid));
+
+        if (booking.getBookingStatus() != BookingStatus.PENDING) {
+            log.warn("Attempted to confirm booking {} with status {}", bookingUuid, booking.getBookingStatus());
+            throw new BookingException("Booking is not in pending state");
+        }
+
+        // Update payment details
+        Payment payment = booking.getPayment();
+        payment.setPaymentGatewayId(paymentIntentId);
+        payment.setStatus(PaymentStatus.SUCCESS);
+        payment.setPaymentMethod(paymentMethod);
+        payment.setUpdatedAt(LocalDateTime.now());
+
+        // Confirm booking
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
+
+        // Update seat statuses (they should already be BOOKED from initial creation)
+        for (ShowtimeSeat seat : booking.getBookedSeats()) {
+            if (seat.getStatus() != ShowtimeSeatStatus.BOOKED) {
+                seat.setStatus(ShowtimeSeatStatus.BOOKED);
+            }
+        }
+        showtimeSeatRepository.saveAll(booking.getBookedSeats());
+
+        bookingRepository.save(booking);
+
+        log.info("Payment and booking confirmed for UUID {}", bookingUuid);
     }
 }

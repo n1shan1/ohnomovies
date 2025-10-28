@@ -90,7 +90,6 @@ export class ShowtimeManagementComponent implements OnInit {
         this.showtimes = showtimes;
       },
       error: (err) => {
-        console.error('Error loading showtimes:', err);
         // Don't show error toast for empty data - handled in template
       },
     });
@@ -102,7 +101,7 @@ export class ShowtimeManagementComponent implements OnInit {
         this.movies = movies;
       },
       error: (err) => {
-        console.error('Failed to load movies', err);
+        // Failed to load movies - handled silently
       },
     });
   }
@@ -113,7 +112,7 @@ export class ShowtimeManagementComponent implements OnInit {
         this.theaters = theaters;
       },
       error: (err) => {
-        console.error('Failed to load theaters', err);
+        // Failed to load theaters - handled silently
       },
     });
   }
@@ -124,7 +123,7 @@ export class ShowtimeManagementComponent implements OnInit {
         this.screens = screens;
       },
       error: (err) => {
-        console.error('Failed to load screens', err);
+        // Failed to load screens - handled silently
       },
     });
   }

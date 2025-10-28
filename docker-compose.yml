@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # Database
+  mysql:
+    image: mysql:8.0
+    container_name: ohnomovies-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ohnomovies_root
+      MYSQL_DATABASE: ohnomovies
+      MYSQL_USER: nishantdev
+      MYSQL_PASSWORD: nishantdev
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ohnomovies-network
+    ports:
+      - "3307:3306"
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ${BACKEND_IMAGE:-ohnomovies-backend:latest}
+    container_name: ohnomovies-backend
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ohnomovies
+      DB_USERNAME: nishantdev
+      DB_PASSWORD: nishantdev
+      JWT_SECRET: a13abc0044076e7329c2b8e1d735bb9c743c4eb7fe1acc52a81f7f6840f1765a
+    ports:
+      - "4001:4000"
+    depends_on:
+      - mysql
+    networks:
+      - ohnomovies-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: ${FRONTEND_IMAGE:-ohnomovies-frontend:latest}
+    container_name: ohnomovies-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - ohnomovies-network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  ohnomovies-network:
+    driver: bridge

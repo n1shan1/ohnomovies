@@ -1,0 +1,190 @@
+.payment-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.payment-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.payment-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.payment-header p {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.booking-summary-card,
+.payment-form-card {
+  margin-bottom: 2rem;
+}
+
+.booking-summary-card ::ng-deep .p-card-header {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.summary-content {
+  color: #333;
+}
+
+.movie-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+}
+
+.movie-info p {
+  margin: 0.25rem 0;
+  color: #7f8c8d;
+}
+
+.seats-info {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ecf0f1;
+}
+
+.seats-info p {
+  margin: 0.25rem 0;
+  font-size: 1.1rem;
+}
+
+.payment-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-field {
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-row .form-field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+input.ng-invalid.ng-touched {
+  border-color: #e74c3c;
+}
+
+.card-input {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+}
+
+.expiry-input {
+  text-align: center;
+}
+
+.cvv-input {
+  max-width: 100px;
+}
+
+.name-input {
+  text-transform: uppercase;
+}
+
+.error-message {
+  display: block;
+  margin-top: 0.25rem;
+  color: #e74c3c;
+  font-size: 0.875rem;
+}
+
+.security-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0 1rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.security-notice i {
+  color: #27ae60;
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.security-notice span {
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.action-buttons ::ng-deep .p-button {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .payment-container {
+    padding: 1rem;
+  }
+
+  .payment-header h2 {
+    font-size: 2rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons ::ng-deep .p-button {
+    margin-bottom: 0.5rem;
+  }
+}
