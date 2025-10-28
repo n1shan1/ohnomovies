@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ApiService } from '../../../core/services/api.service';
-import { environment } from '../../../../env/env';
+import { environment } from '../../../../environments/environment';
 import {
   ShowtimeDto,
   ShowtimeSeatDto,
