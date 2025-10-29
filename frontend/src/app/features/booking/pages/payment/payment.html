@@ -1,144 +1,212 @@
-<div class="payment-container">
+<div class="min-h-screen bg-gradient-to-br from-primary-50 via-surface-50 to-primary-100 py-8 px-4">
   <p-toast></p-toast>
 
-  <div class="payment-header">
-    <h2>Secure Payment</h2>
-    <p>Complete your booking by entering your payment details</p>
-  </div>
-
-  <div class="booking-summary-card">
-    <p-card header="Booking Summary">
-      <div class="summary-content" *ngIf="showtime">
-        <div class="movie-info">
-          <h3>{{ showtime.movieTitle }}</h3>
-          <p>{{ showtime.theaterName }} - {{ showtime.screenName }}</p>
-          <p>{{ showtime.startTime | date : 'medium' }}</p>
-        </div>
-        <div class="seats-info">
-          <p><strong>Seats:</strong> {{ selectedSeats.length }}</p>
-          <p><strong>Total Amount:</strong> ₹{{ totalAmount }}</p>
-        </div>
+  <div class="max-w-4xl mx-auto">
+    <!-- Header Section -->
+    <div class="text-center mb-8">
+      <div
+        class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-700 rounded-full mb-4 shadow-lg"
+      >
+        <i class="pi pi-credit-card text-white text-2xl"></i>
       </div>
-    </p-card>
-  </div>
+      <h1 class="text-4xl font-bold text-surface-900 mb-2">Secure Payment</h1>
+      <p class="text-lg text-surface-600">Complete your booking with confidence</p>
+    </div>
 
-  <div class="payment-form-card">
-    <p-card header="Payment Details">
-      <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="payment-form">
-        <!-- Card Number -->
-        <div class="form-field">
-          <label for="cardNumber">Card Number *</label>
-          <input
-            pInputText
-            id="cardNumber"
-            formControlName="cardNumber"
-            placeholder="1234 5678 9012 3456"
-            (input)="formatCardNumber($event)"
-            maxlength="19"
-            class="card-input"
-            [class.ng-invalid]="cardNumber?.invalid && cardNumber?.touched"
-          />
-          <small class="error-message" *ngIf="cardNumber?.invalid && cardNumber?.touched">
-            Please enter a valid card number (format: 1234 5678 9012 3456)
-          </small>
-        </div>
+    <div class="grid lg:grid-cols-2 gap-8">
+      <!-- Booking Summary -->
+      <div class="order-2 lg:order-1">
+        <p-card
+          class="shadow-xl border-0"
+          headerClass="bg-gradient-to-r from-primary-500 to-primary-700 text-white"
+        >
+          <ng-template pTemplate="header">
+            <div class="flex items-center gap-3 p-4">
+              <i class="pi pi-ticket text-xl"></i>
+              <h3 class="text-xl font-semibold m-0">Booking Summary</h3>
+            </div>
+          </ng-template>
 
-        <!-- Expiry Date -->
-        <div class="form-row">
-          <div class="form-field">
-            <label for="expiryMonth">Expiry Month *</label>
-            <input
-              pInputText
-              id="expiryMonth"
-              formControlName="expiryMonth"
-              placeholder="MM"
-              maxlength="2"
-              class="expiry-input"
-              [class.ng-invalid]="expiryMonth?.invalid && expiryMonth?.touched"
-            />
-            <small class="error-message" *ngIf="expiryMonth?.invalid && expiryMonth?.touched">
-              Invalid month (01-12)
-            </small>
+          <div class="space-y-4" *ngIf="showtime">
+            <!-- Movie Info -->
+            <div class="bg-surface-100 rounded-lg p-4">
+              <h4 class="text-lg font-semibold text-surface-900 mb-2">{{ showtime.movieTitle }}</h4>
+              <div class="space-y-1 text-sm text-surface-600">
+                <p class="flex items-center gap-2">
+                  <i class="pi pi-building text-primary-500"></i>
+                  {{ showtime.theaterName }} - {{ showtime.screenName }}
+                </p>
+                <p class="flex items-center gap-2">
+                  <i class="pi pi-clock text-green-500"></i>
+                  {{ showtime.startTime | date : 'medium' }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Seats & Amount -->
+            <div class="border-t border-surface-200 pt-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-surface-600">Selected Seats:</span>
+                <span class="font-semibold text-lg">{{ selectedSeats.length }}</span>
+              </div>
+              <div class="flex justify-between items-center text-xl font-bold text-green-600">
+                <span>Total Amount:</span>
+                <span>₹{{ totalAmount }}</span>
+              </div>
+            </div>
           </div>
+        </p-card>
+      </div>
 
-          <div class="form-field">
-            <label for="expiryYear">Expiry Year *</label>
-            <input
-              pInputText
-              id="expiryYear"
-              formControlName="expiryYear"
-              placeholder="YY"
-              maxlength="2"
-              class="expiry-input"
-              [class.ng-invalid]="expiryYear?.invalid && expiryYear?.touched"
-            />
-            <small class="error-message" *ngIf="expiryYear?.invalid && expiryYear?.touched">
-              Invalid year
-            </small>
-          </div>
-        </div>
+      <!-- Payment Form -->
+      <div class="order-1 lg:order-2">
+        <p-card class="shadow-xl border-0">
+          <ng-template pTemplate="header">
+            <div class="flex items-center gap-3 p-4 border-b border-surface-200">
+              <i class="pi pi-lock text-green-500 text-xl"></i>
+              <h3 class="text-xl font-semibold m-0 text-surface-900">Payment Details</h3>
+            </div>
+          </ng-template>
 
-        <!-- CVV -->
-        <div class="form-field">
-          <label for="cvv">CVV *</label>
-          <input
-            pInputText
-            id="cvv"
-            formControlName="cvv"
-            placeholder="123"
-            maxlength="4"
-            type="password"
-            class="cvv-input"
-            [class.ng-invalid]="cvv?.invalid && cvv?.touched"
-          />
-          <small class="error-message" *ngIf="cvv?.invalid && cvv?.touched">
-            CVV must be 3-4 digits
-          </small>
-        </div>
+          <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="space-y-6">
+            <!-- Card Number -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-surface-700">
+                Card Number <span class="text-red-500">*</span>
+              </label>
+              <input
+                pInputText
+                formControlName="cardNumber"
+                placeholder="1234 5678 9012 3456"
+                (input)="formatCardNumber($event)"
+                maxlength="19"
+                class="w-full px-4 py-3 border-2 border-surface-200 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all font-mono text-lg tracking-wider"
+                [class.border-red-300]="cardNumber?.invalid && cardNumber?.touched"
+              />
+              <small
+                class="text-red-500 text-sm"
+                *ngIf="cardNumber?.invalid && cardNumber?.touched"
+              >
+                Please enter a valid card number
+              </small>
+            </div>
 
-        <!-- Cardholder Name -->
-        <div class="form-field">
-          <label for="cardholderName">Cardholder Name *</label>
-          <input
-            pInputText
-            id="cardholderName"
-            formControlName="cardholderName"
-            placeholder="John Doe"
-            class="name-input"
-            [class.ng-invalid]="cardholderName?.invalid && cardholderName?.touched"
-          />
-          <small class="error-message" *ngIf="cardholderName?.invalid && cardholderName?.touched">
-            Name must be 2-50 characters
-          </small>
-        </div>
+            <!-- Expiry Date Row -->
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-surface-700">
+                  Expiry Month <span class="text-red-500">*</span>
+                </label>
+                <input
+                  pInputText
+                  formControlName="expiryMonth"
+                  placeholder="MM"
+                  maxlength="2"
+                  class="w-full px-4 py-3 border-2 border-surface-200 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-center font-semibold"
+                  [class.border-red-300]="expiryMonth?.invalid && expiryMonth?.touched"
+                />
+                <small
+                  class="text-red-500 text-sm"
+                  *ngIf="expiryMonth?.invalid && expiryMonth?.touched"
+                >
+                  Invalid month (01-12)
+                </small>
+              </div>
 
-        <!-- Security Notice -->
-        <div class="security-notice">
-          <i class="pi pi-shield"></i>
-          <span>Your payment information is encrypted and secure</span>
-        </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-surface-700">
+                  Expiry Year <span class="text-red-500">*</span>
+                </label>
+                <input
+                  pInputText
+                  formControlName="expiryYear"
+                  placeholder="YY"
+                  maxlength="2"
+                  class="w-full px-4 py-3 border-2 border-surface-200 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-center font-semibold"
+                  [class.border-red-300]="expiryYear?.invalid && expiryYear?.touched"
+                />
+                <small
+                  class="text-red-500 text-sm"
+                  *ngIf="expiryYear?.invalid && expiryYear?.touched"
+                >
+                  Invalid year
+                </small>
+              </div>
+            </div>
 
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-          <p-button
-            label="Back"
-            icon="pi pi-arrow-left"
-            type="button"
-            styleClass="p-button-secondary"
-            (onClick)="goBack()"
-            [disabled]="isProcessing"
-          ></p-button>
+            <!-- CVV -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-surface-700">
+                CVV <span class="text-red-500">*</span>
+              </label>
+              <input
+                pInputText
+                formControlName="cvv"
+                placeholder="123"
+                maxlength="4"
+                type="password"
+                class="w-full max-w-24 px-4 py-3 border-2 border-surface-200 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-center font-semibold"
+                [class.border-red-300]="cvv?.invalid && cvv?.touched"
+              />
+              <small class="text-red-500 text-sm" *ngIf="cvv?.invalid && cvv?.touched">
+                CVV must be 3-4 digits
+              </small>
+            </div>
 
-          <p-button
-            label="Pay Now"
-            icon="pi pi-credit-card"
-            type="submit"
-            styleClass="p-button-success"
-            [loading]="isProcessing"
-            [disabled]="paymentForm.invalid || isProcessing"
-          ></p-button>
-        </div>
-      </form>
-    </p-card>
+            <!-- Cardholder Name -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-surface-700">
+                Cardholder Name <span class="text-red-500">*</span>
+              </label>
+              <input
+                pInputText
+                formControlName="cardholderName"
+                placeholder="John Doe"
+                class="w-full px-4 py-3 border-2 border-surface-200 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all capitalize"
+                [class.border-red-300]="cardholderName?.invalid && cardholderName?.touched"
+              />
+              <small
+                class="text-red-500 text-sm"
+                *ngIf="cardholderName?.invalid && cardholderName?.touched"
+              >
+                Name must be 2-50 characters
+              </small>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
+              <i class="pi pi-shield text-green-600 text-xl"></i>
+              <div>
+                <p class="font-medium text-green-800 m-0">Secure Payment</p>
+                <p class="text-sm text-green-600 m-0">
+                  Your payment information is encrypted and secure
+                </p>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-4 pt-6">
+              <p-button
+                label="Back"
+                icon="pi pi-arrow-left"
+                type="button"
+                styleClass="p-button-outlined p-button-secondary flex-1 py-3"
+                (onClick)="goBack()"
+                [disabled]="isProcessing"
+              ></p-button>
+
+              <p-button
+                label="Pay Now"
+                icon="pi pi-credit-card"
+                type="submit"
+                styleClass="p-button-success flex-1 py-3 bg-gradient-to-r from-green-500 to-green-600 border-green-500 hover:from-green-600 hover:to-green-700"
+                [loading]="isProcessing"
+                [disabled]="paymentForm.invalid || isProcessing"
+              ></p-button>
+            </div>
+          </form>
+        </p-card>
+      </div>
+    </div>
   </div>
 </div>

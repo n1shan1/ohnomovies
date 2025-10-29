@@ -55,7 +55,7 @@ jobs:
 
       - name: Image build summary
         run: |
-          echo "✅ Docker images built and pushed successfully!"
+          echo "[SUCCESS]: Docker images built and pushed successfully!"
           echo "Backend: ${{ env.BACKEND_IMAGE }}:latest"
           echo "Frontend: ${{ env.FRONTEND_IMAGE }}:latest"
 
@@ -90,7 +90,7 @@ jobs:
           ssh -i private_key.pem -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << ENDSSH
             set -e
             
-            echo "🚀 Starting deployment..."
+            echo "[INFO]: Starting deployment..."
             
             # Navigate to app directory
             cd /opt/ohnomovies/app
@@ -103,35 +103,35 @@ jobs:
             echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
             
             # Pull latest images
-            echo "📥 Pulling latest images..."
+            echo "[INFO]: Pulling latest images..."
             docker pull \${BACKEND_IMAGE}
             docker pull \${FRONTEND_IMAGE}
             
             # Stop existing containers
-            echo "🛑 Stopping existing containers..."
+            echo "[INFO]: Stopping existing containers..."
             docker-compose down || true
             
             # Start new containers
-            echo "🚀 Starting containers..."
+            echo "[INFO]:  Starting containers..."
             docker-compose up -d
             
             # Wait for services to start
-            echo "⏳ Waiting for services to start..."
+            echo "[INFO]:  Waiting for services to start..."
             sleep 20
             
             # Check container status
-            echo "📊 Container status:"
+            echo "[INFO]: Container status:"
             docker-compose ps
             
             # Show logs
-            echo "📝 Recent logs:"
+            echo "[INFO]: Recent logs:"
             docker-compose logs --tail=20
             
             # Clean up old images
-            echo "🧹 Cleaning up old images..."
+            echo "[INFO]: Cleaning up old images..."
             docker image prune -af || true
             
-            echo "✅ Deployment completed successfully!"
+            echo "[SUCCESS]:  Deployment completed successfully!"
           ENDSSH
           
           # Clean up SSH key
@@ -141,9 +141,9 @@ jobs:
         if: always()
         run: |
           if [ ${{ job.status }} == 'success' ]; then
-            echo "🎉 Deployment successful!"
-            echo "🌐 Frontend: http://${{ secrets.EC2_HOST }}:8080"
-            echo "🔗 Backend API: http://${{ secrets.EC2_HOST }}:4001/api/v1"
+            echo "[SUCCESS]:  Deployment successful!"
+            echo "[INFO]: Frontend: http://${{ secrets.EC2_HOST }}:8080"
+            echo "[INFO]: Backend API: http://${{ secrets.EC2_HOST }}:4001/api/v1"
           else
-            echo "❌ Deployment failed! Check logs above."
+            echo "[ERROR]:  Deployment failed! Check logs above."
           fi
